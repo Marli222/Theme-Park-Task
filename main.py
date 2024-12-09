@@ -5,7 +5,7 @@ class Attraction:
     self._status = status
         
   def get_details(self):
-    print(f"Attraction: {self._name}, Capacity: {self._capacity}")
+    print(f"Attraction: {self._name}, Capacity: {self._capacity}, Status: {self._status}")
   def start(self):
     if self._status == True:
         print("The attraction is starting.")
@@ -53,7 +53,7 @@ class Vistor:
         self._height = height
         self._ride = []
     def ride(self,attraction):
-       if attraction.is_eligible(self._age,self._height) == True:
+       if attraction.is_eligible(self._age,self._height) == True and attraction._status == True:
         print(f"{self._name} is riding {attraction._name}")
         self._ride.append(attraction._name)
        else:
@@ -62,33 +62,41 @@ class Vistor:
        print(self._ride)
 
 class Manager(Staff):
-    def __init__(self,name,role,team):
-      super.__init__(name,"Manager")
+    def __init__(self,name):
+      self._name = name
+      self._role = "Manager"
       self._team = []
     def add_staff(self,staff):
-      self._team.append(staff._name)
+      self._team.append(staff)
     def get_team_summary(self):
-       print(self._team)
+       for x in self._team:
+        print(x._name,":",x._role)
             
-Drag = ThrillRide("Dragon Coaster",20,140,True)
-Merry = FamilyRide("Merry-Go-Round",30,4,False)
-Armeen = Vistor("Armeen",17,155)
-Armeen.ride(Drag)
-Armeen.ride(Merry)
-Drag.start()
+Dragon = ThrillRide("Dragon Coaster",20,True,140)
+Dragon.start()
+Dragon.get_details()
+
+Merry = FamilyRide("The Merry",30,True,4)
 Merry.start()
-visitor = Vistor("Alice", 10, 130)
-coaster = ThrillRide("Dragon Coaster",20,140,True)
+Merry.get_details()
 
-print(coaster.start())  # Output: "Thrill Ride Dragon Coaster is now starting. Hold on tight!"
-visitor.ride(coaster)  # Output: "Alice is not eligible for Dragon Coaster."
-
-carousel = FamilyRide("Merry-Go-Round",30,4,True)
-visitor.ride(carousel)  # Output: "Alice is enjoying the Merry-Go-Round!"
-visitor.view_history()  # Output: ["Merry-Go-Round"]
-            
-Drag = ThrillRide("Dragon Coaster",20,140)
-Merry = FamilyRide("Merry-Go-Round",30,4)
-Armeen = Vistor("Armeen",17,155)
-Armeen.ride(Drag)
+Armeen = Vistor("Armeen",17,150)
 Armeen.ride(Merry)
+Armeen.ride(Dragon)
+Armeen.view_history()
+
+Merry.close_attraction()
+Dragon.close_attraction()
+
+Armeen.ride(Merry)
+Armeen.ride(Dragon)
+
+Riley = Staff("Riley","Customer Service")
+John = Staff("John","Customer Service")
+Alice = Staff("Alice","Customer Service")
+
+Lily = Manager("Lily")
+Lily.add_staff(Riley)
+Lily.add_staff(John)
+Lily.add_staff(Alice)
+Lily.get_team_summary()
